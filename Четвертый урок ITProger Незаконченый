@@ -1,0 +1,26 @@
+import telebot
+import sqlite3
+
+bot = telebot.TeleBot('6853584795:AAG1X_3nVDG9SzatOwKvlxooIpAsrBhYXrE')
+
+
+@bot.message_handler(commands=['start'])
+def start(message):
+    conn = sqlite3.connect('itproger.sql')
+
+    cur = conn.cursor()
+    cur.execute(
+        'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50), pass VARCHAR(50))'
+    )
+    conn.commit()
+    cur.close()
+    conn.close()
+    bot.send_message(message.chat.id, 'Привет сейчас тебя зарегестрируем! Введи свое имя')
+    bot.register_next_step_handler(message, user_name)
+
+
+def user_name():
+    pass
+
+
+bot.polling(none_stop=True)
