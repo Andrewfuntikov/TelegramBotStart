@@ -1,0 +1,30 @@
+import telebot
+import requests
+import json
+
+bot = telebot.TeleBot('6853584795:AAG1X_3nVDG9SzatOwKvlxooIpAsrBhYXrE')
+API = '4dd0ad38d84ae8184b3aaa116394f84f'
+
+
+@bot.message_handler(commands=['start'])
+def start(message):
+    bot.send_message(message.chat.id, 'Привет! Напиши название своего города')
+
+
+@bot.message_handler(content_types=['text'])
+def get_weather(message):
+    city = message.text.strip().lower()
+    res = requests.get(
+        f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API}&units=metric')
+    if res.status_code == 200:
+        data = json.loads(res.text)
+        temp = data["main"]["temp"]
+        bot.reply_to(message, f'Сейчас погода: {temp}')
+        image = 'Хэнк веселый.jpg' if temp > 5.0 else 'Хэнк грустный.jpg'
+        file = open('./' + image, 'rb')
+        bot.send_photo(message.chat.id, file)
+    else:
+        bot.reply_to(message, 'Город указан не верно')
+
+
+bot.polling(none_stop=True)
