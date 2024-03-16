@@ -1,0 +1,30 @@
+from aiogram import Bot, Dispatcher, executor, types
+
+bot = Bot('6853584795:AAG1X_3nVDG9SzatOwKvlxooIpAsrBhYXrE')
+dp = Dispatcher(bot)
+
+
+@dp.message_handler(commands=['inline'])
+async def start(message: types.Message):
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton('Site', url="https://youtu.be/085sSdwvl2k?si=478Zyy9o5iRBK5Bl"))
+    markup.add(types.InlineKeyboardButton('Привет', callback_data='Привет'))
+
+    await message.reply('Hello', reply_markup=markup)
+
+
+@dp.callback_query_handler(text='Привет')
+async def hello_callback_handler(callback_query: types.CallbackQuery):
+    await callback_query.answer('Привет!')
+    await callback_query.message.answer('Привет!')
+
+
+@dp.message_handler(commands=['reply'])
+async def reply(message: types.Message):
+    markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+    markup.add(types.InlineKeyboardButton('Site'))
+    markup.add(types.InlineKeyboardButton('WebSite'))
+    await message.answer('Hallo', reply_markup=markup)
+
+
+executor.start_polling(dp)
