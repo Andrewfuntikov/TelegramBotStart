@@ -1,0 +1,123 @@
+import asyncio
+import logging
+from aiogram import Bot, Dispatcher, types
+from aiogram.filters.command import Command
+from random import randint
+from aiogram import F
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.types.web_app_info import WebAppInfo
+import random
+
+# Включаем логирование, чтобы не пропустить важные сообщения
+logging.basicConfig(level=logging.INFO)
+# Объект бота
+bot = Bot(token="6853584795:AAG1X_3nVDG9SzatOwKvlxooIpAsrBhYXrE")
+# Диспетчер
+dp = Dispatcher()
+
+
+# хендлер на команду /start
+@dp.message(Command("start"))
+async def cmd_start(message: types.Message):
+    kb = [
+        [types.KeyboardButton(text="💖 Подарок в честь открытие бота 💖")],
+        [types.KeyboardButton(text="◄🎆►Большой пак▫️аватарки▪️▫️"),
+         types.KeyboardButton(text="💌💖100.000 аккаунтов с играми с платными играми 💖💌"),
+         types.KeyboardButton(text="🌐 d i s c o r d 🌐 | 🌟пак готовых серверов 🌟|")]
+
+    ]
+    keyboard = types.ReplyKeyboardMarkup(
+        keyboard=kb,
+        resize_keyboard=True,
+        input_field_placeholder=f"Просто нажми на кнопку"
+    )
+    await message.answer("Привет, в этом боте собраны крутые товары и ссылки на них их каталог открылся у тебя ниже",
+                         reply_markup=keyboard)
+    # await message.answer(
+    # f" Каталог: \n Большой пак аватарок ▪️ 🛒 \n 🌐 ＤＩＳＣＯＲＤ 🌐 | 🌟ПАК ГОТОВЫХ СЕРВЕРОВ 🌟| \n 💌100.000 аккаунтов с играми с платными играми 💌  \n Если что-то понравилось введи /info чтоб узнать поподробнее, а если уверен то нажми на кнопки которые открылись у тебя ниже",
+    # reply_markup=keyboard)
+
+
+# @dp.message(F.text.lower() == "мне нужно купить аккаунт Steam")
+# async def with_puree(message: types.Message):
+# markup = types.InlineKeyboardMarkup()
+# await message.reply("Хороший выбор, у меня есть 2 предложения для тебя!", )
+# btn1 = (types.InlineKeyboardButton('Хороший выбор, у меня есть 2 предложения для тебя!',
+# url='https://funpay.com/users/4430692/'))
+# markup.row(btn1)
+# btn3 = (types.InlineKeyboardButton('Спс ему не скам', url='https://funpay.com/users/4430692/'))
+# markup.row(btn3)
+
+
+@dp.message(F.text.lower() == "◄🎆►большой пак▫️аватарки▪️▫️")
+async def cmd_random(message: types.Message):
+    builder = InlineKeyboardBuilder()
+    builder.add(types.InlineKeyboardButton(
+        text="Пак аватарок",
+        url='https://funpay.com/lots/offer?id=26548747')
+    )
+    await message.answer(
+        "Нажми на кнопку ниже,  чтобы быть самым крутым",
+        reply_markup=builder.as_markup()
+    )
+
+
+@dp.message(F.text.lower() == "💖 подарок в честь открытие бота 💖")
+async def cmd_random(message: types.Message):
+    builder = InlineKeyboardBuilder()
+    builder.add(types.InlineKeyboardButton(
+        text="Подарок",
+        url='https://docs.google.com/document/d/1TF-mmYmjCDQJKJ_i8Q3GFmRAqYjXiIq7/edit')
+    )
+    await message.answer(
+        "Нажми на кнопку ниже,  чтобы быть самым крутым",
+        reply_markup=builder.as_markup()
+    )
+
+
+@dp.message(F.text.lower() == "💌💖100.000 аккаунтов с играми с платными играми 💖💌")
+async def without_puree(message: types.Message):
+    builder = InlineKeyboardBuilder()
+    builder.add(types.InlineKeyboardButton(
+        text="Аккаунты стим",
+        url='https://funpay.com/lots/offer?id=26714756')
+    )
+    await message.answer(
+        "Нажмите на кнопку ниже, чтобы перейти на сайт",
+        reply_markup=builder.as_markup()
+    )
+
+
+@dp.message(F.text.lower() == "🌐 d i s c o r d 🌐 | 🌟пак готовых серверов 🌟|")
+async def without_puree(message: types.Message):
+    builder = InlineKeyboardBuilder()
+    builder.add(types.InlineKeyboardButton(
+        text="Дискорд сервера",
+        url='https://funpay.com/lots/offer?id=26763509')
+    )
+    await message.answer(
+        "Нажмите на кнопку  ниже, чтобы перейти на сайт",
+        reply_markup=builder.as_markup()
+    )
+
+
+# Хэндлер на команду /help
+@dp.message(Command("help"))
+async def cmd_help(message: types.Message):
+    await message.answer("Обратная связь @and_hunter78")
+
+
+# Хэндлер на команду /info
+@dp.message(Command("info"))
+async def cmd_help(message: types.Message):
+    await message.answer(
+        "Вот информация по всем товарам: \n Пак аватарок- 25к штук на разные темы \n Сервера дискорд- вам даются шаблоны на севера на много разных тем \n Аккаунты стим - общие аккаунты очень много игр, аккаунтов около 100.000 некоторые могут не работать( ")
+
+
+# Запуск процесса поллинга новых апдейтов
+async def main():
+    await dp.start_polling(bot)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
