@@ -1,0 +1,97 @@
+import asyncio
+import logging
+from aiogram import Bot, Dispatcher, types
+from aiogram.filters.command import Command
+from random import randint
+from aiogram import F
+# новый импорт
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+
+# Включаем логирование, чтобы не пропустить важные сообщения
+logging.basicConfig(level=logging.INFO)
+# Объект бота
+bot = Bot(token="6853584795:AAG1X_3nVDG9SzatOwKvlxooIpAsrBhYXrE")
+# Диспетчер
+dp = Dispatcher()
+
+
+@dp.message(Command("start"))
+async def cmd_start(message: types.Message):
+    kb = [
+        [
+            types.KeyboardButton(text="Мне нужно купить аккаунт Steam"),
+            types.KeyboardButton(text="Мне нужно потратить мои деньги"),
+            types.KeyboardButton(text="Мне нужен самый крутой продавец на Funpay")
+        ],
+    ]
+    keyboard = types.ReplyKeyboardMarkup(
+        keyboard=kb,
+        resize_keyboard=True,
+        input_field_placeholder="Что хотите"
+    )
+    await message.answer("Что хотите сделать?", reply_markup=keyboard)
+
+
+# @dp.message(F.text.lower() == "мне нужно купить аккаунт Steam")
+# async def with_puree(message: types.Message):
+# markup = types.InlineKeyboardMarkup()
+# await message.reply("Хороший выбор, у меня есть 2 предложения для тебя!", )
+# btn1 = (types.InlineKeyboardButton('Хороший выбор, у меня есть 2 предложения для тебя!',
+# url='https://funpay.com/users/4430692/'))
+# markup.row(btn1)
+# btn3 = (types.InlineKeyboardButton('Спс ему не скам', url='https://funpay.com/users/4430692/'))
+# markup.row(btn3)
+
+
+@dp.message(F.text.lower() == "мне нужно купить аккаунт steam")
+async def cmd_random(message: types.Message):
+    builder = InlineKeyboardBuilder()
+    builder.add(types.InlineKeyboardButton(
+        text="Спс ему не скам",
+        url='https://funpay.com/users/4430692/')
+    )
+    await message.answer(
+        "Нажмите на кнопку, чтобы Купить аккаунт Steam",
+        reply_markup=builder.as_markup()
+    )
+
+
+@dp.message(F.text.lower() == "мне нужно потратить мои деньги")
+async def without_puree(message: types.Message):
+    builder = InlineKeyboardBuilder()
+    builder.add(types.InlineKeyboardButton(
+        text="Купи в пару раз дороже",
+        url='https://playerok3.com/')
+    )
+    await message.answer(
+        "Нажмите на кнопку, чтобы Купить в пару раз дороже",
+        reply_markup=builder.as_markup()
+    )
+
+
+@dp.message(F.text.lower() == "мне нужен самый крутой продавец на funpay")
+async def without_puree(message: types.Message):
+    builder = InlineKeyboardBuilder()
+    builder.add(types.InlineKeyboardButton(
+        text="самый крутой продавец на фан пей",
+        url='https://funpay.com/users/9182005/')
+    )
+    await message.answer(
+        "Нажмите на кнопку, чтобы Купить в пару раз дороже",
+        reply_markup=builder.as_markup()
+    )
+
+
+# Хэндлер на команду /help
+@dp.message(Command("help"))
+async def cmd_help(message: types.Message):
+    await message.answer("Помощи не будет")
+
+
+# Запуск процесса поллинга новых апдейтов
+async def main():
+    await dp.start_polling(bot)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
