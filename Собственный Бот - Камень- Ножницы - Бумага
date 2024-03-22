@@ -1,0 +1,252 @@
+import asyncio
+import logging
+from aiogram import Bot, Dispatcher, types
+from aiogram.filters.command import Command
+from aiogram import F
+import random
+
+# Включаем логирование, чтобы не пропустить важные сообщения
+logging.basicConfig(level=logging.INFO)
+# Объект бота
+bot = Bot(token="6853584795:AAG1X_3nVDG9SzatOwKvlxooIpAsrBhYXrE")
+# Диспетчер
+dp = Dispatcher()
+
+
+# хендлер на команду /start
+@dp.message(Command("start"))
+async def cmd_start(message: types.Message):
+    # набор наших кнопок
+    kb = [
+        [types.KeyboardButton(text="Давай!"),
+         types.KeyboardButton(text="К сожалению нет")]
+
+    ]
+    keyboard = types.ReplyKeyboardMarkup(
+        keyboard=kb,
+        resize_keyboard=True,
+        input_field_placeholder=f"Просто нажми на кнопку"
+    )
+    await message.answer(
+        "Привет \n \n Давай сыграем в игру 'Камень 🗿 - Ножницы ✂ - Бумага 📜'\n \n Если забыл правила нажми, то воспользуйся командой /help \n \n Играем?",
+        reply_markup=keyboard)
+
+
+# Хэндлер на команду /help
+@dp.message(Command("help"))
+async def cmd_help(message: types.Message):
+    kb = [
+        [types.KeyboardButton(text="Давай!"),
+         types.KeyboardButton(text="К сожалению нет")]
+
+    ]
+    keyboard = types.ReplyKeyboardMarkup(
+        keyboard=kb,
+        resize_keyboard=True,
+        input_field_placeholder=f"Просто нажми на кнопку"
+    )
+    await message.answer(
+        "Победитель определяется по следующим правилам: \n Бумага побеждает камень («бумага обёртывает камень»).\n Камень побеждает ножницы («камень затупляет ножницы»). \n Ножницы побеждают бумагу («ножницы разрезают бумагу»). Играем?",
+        reply_markup=keyboard)
+
+
+# Если пользователь нажмет на кнопку "Давай!"
+@dp.message(F.text.lower() == "давай!")
+async def cmd_random(message: types.Message):
+    kb = [
+        [types.KeyboardButton(text="Камень 🗿"),
+         types.KeyboardButton(text="Ножницы ✂")],
+        [types.KeyboardButton(text="Бумага 📜")]
+
+    ]
+    keyboard = types.ReplyKeyboardMarkup(
+        keyboard=kb,
+        resize_keyboard=True,
+        input_field_placeholder=f"Сделай выбор:"
+    )
+    await message.reply(f'GUT! Сделай свой выбор!', reply_markup=keyboard)
+
+
+# Если пользователь не захочет играть
+@dp.message(F.text.lower() == "к сожалению нет")
+async def cmd_random(message: types.Message):
+    await message.reply(
+        "Жаль. Если передумаешь, скажи мне!"
+    )
+
+
+# Если пользователь нажмёт на кнопку Камень 🗿
+@dp.message(F.text.lower() == "камень 🗿")
+async def cmd_random(message: types.Message):
+    random_choice = random.choice(["Камень 🗿", "Ножницы ✂", "Бумага 📜"])
+    if random_choice == 'Камень 🗿' and message.text == 'Камень 🗿' or random_choice == 'Ножницы ✂' and message.text == "Ножницы ✂" or random_choice == 'Бумага 📜' and message.text == "Бумага 📜":
+        answer_bot = 'Ничья'
+    elif random_choice == 'Бумага 📜' and message.text == 'Камень 🗿' or random_choice == 'Камень 🗿' and message.text == 'Ножницы ✂' or random_choice == 'Ножницы ✂' and message.text == 'Бумага 📜':
+        answer_bot = 'Я выйграл'
+    elif random_choice == 'Камень 🗿' and message.text == 'Бумага 📜' or random_choice == 'Ножницы ✂' and message.text == 'Камень 🗿' or random_choice == 'Бумага 📜' and message.text == 'Ножницы ✂':
+        answer_bot = 'Ты выйграл'
+    else:
+        answer_bot = 'Что-то не понятное советую перезапустить бот! /start'
+    await message.reply(
+        f"Мой выбор {random_choice}, а твой {message.text}"
+
+    )
+    kb = [
+        [types.KeyboardButton(text="Давай ещё раз!"),
+         types.KeyboardButton(text="Не хочу больше.Спасибо!")]
+
+    ]
+    keyboard = types.ReplyKeyboardMarkup(
+        keyboard=kb,
+        resize_keyboard=True,
+        input_field_placeholder=f"Сделай выбор:"
+    )
+    await message.answer(f"{answer_bot} Сыграем еще?", reply_markup=keyboard)
+
+
+# Если пользователь нажмёт на кнопку Бумага 📜
+@dp.message(F.text.lower() == "бумага 📜")
+async def cmd_random(message: types.Message):
+    random_choice = random.choice(["Камень 🗿", "Ножницы ✂", "Бумага 📜"])
+    if random_choice == 'Камень 🗿' and message.text == 'Камень 🗿' or random_choice == 'Ножницы ✂' and message.text == "Ножницы ✂" or random_choice == 'Бумага 📜' and message.text == "Бумага 📜":
+        answer_bot = 'Ничья'
+    elif random_choice == 'Бумага 📜' and message.text == 'Камень 🗿' or random_choice == 'Камень 🗿' and message.text == 'Ножницы ✂' or random_choice == 'Ножницы ✂' and message.text == 'Бумага 📜':
+        answer_bot = 'Я выйграл'
+    elif random_choice == 'Камень 🗿' and message.text == 'Бумага 📜' or random_choice == 'Ножницы ✂' and message.text == 'Камень 🗿' or random_choice == 'Бумага 📜' and message.text == 'Ножницы ✂':
+        answer_bot = 'Ты выйграл'
+    else:
+        answer_bot = 'Что-то не понятное советую перезапустить бот! /start'
+    await message.reply(
+        f"Мой выбор {random_choice}, а твой {message.text}"
+
+    )
+    kb = [
+        [types.KeyboardButton(text="Давай ещё раз!"),
+         types.KeyboardButton(text="Не хочу больше.Спасибо!")]
+
+    ]
+    keyboard = types.ReplyKeyboardMarkup(
+        keyboard=kb,
+        resize_keyboard=True,
+        input_field_placeholder=f"Сделай выбор:"
+    )
+    await message.answer(f"{answer_bot} Сыграем еще?", reply_markup=keyboard)
+
+
+# Если пользователь нажмёт на кнопку Ножницы ✂
+@dp.message(F.text.lower() == "ножницы ✂")
+async def cmd_random(message: types.Message):
+    random_choice = random.choice(["Камень 🗿", "Ножницы ✂", "Бумага 📜"])
+    if random_choice == 'Камень 🗿' and message.text == 'Камень 🗿' or random_choice == 'Ножницы ✂' and message.text == "Ножницы ✂" or random_choice == 'Бумага 📜' and message.text == "Бумага 📜":
+        answer_bot = 'Ничья'
+    elif random_choice == 'Бумага 📜' and message.text == 'Камень 🗿' or random_choice == 'Камень 🗿' and message.text == 'Ножницы ✂' or random_choice == 'Ножницы ✂' and message.text == 'Бумага 📜':
+        answer_bot = 'Я выйграл'
+    elif random_choice == 'Камень 🗿' and message.text == 'Бумага 📜' or random_choice == 'Ножницы ✂' and message.text == 'Камень 🗿' or random_choice == 'Бумага 📜' and message.text == 'Ножницы ✂':
+        answer_bot = 'Ты выйграл'
+    else:
+        answer_bot = 'Что-то не понятное советую перезапустить бот! /start'
+    await message.reply(
+        f"Мой выбор {random_choice}, а твой {message.text}"
+
+    )
+    kb = [
+        [types.KeyboardButton(text="Давай ещё раз!"),
+         types.KeyboardButton(text="Не хочу больше.Спасибо!")]
+
+    ]
+    keyboard = types.ReplyKeyboardMarkup(
+        keyboard=kb,
+        resize_keyboard=True,
+        input_field_placeholder=f"Сделай выбор:"
+    )
+    await message.answer(f"{answer_bot} Сыграем еще?", reply_markup=keyboard)
+
+
+@dp.message(F.text.lower() == "давай ещё раз!")
+async def cmd_random(message: types.Message):
+    kb = [
+        [types.KeyboardButton(text="Камень 🗿"),
+         types.KeyboardButton(text="Ножницы ✂")],
+        [types.KeyboardButton(text="Бумага 📜")]
+
+    ]
+    keyboard = types.ReplyKeyboardMarkup(
+        keyboard=kb,
+        resize_keyboard=True,
+        input_field_placeholder=f"Сделай выбор:"
+    )
+    await message.reply(f'GUT! Сделай свой выбор!', reply_markup=keyboard)
+
+
+@dp.message(F.text.lower() == "не хочу больше.спасибо!")
+async def cmd_random(message: types.Message):
+    await message.reply(
+        "Жаль. Если передумаешь, скажи мне!"
+    )
+    
+
+# создаем функции для обработчика если пользователь пришлет не команду
+async def handle_text(message: types.Message):
+    await message.answer("Вы отправили текст,а нужно команду!")
+
+
+async def handle_photo(message: types.Message):
+    await message.answer("Вы отправили фото,а нужно команду!")
+
+
+async def handle_video(message: types.Message):
+    await message.answer("Вы отправили видео,а нужно команду! ")
+
+
+async def handle_audio(message: types.Message):
+    await message.answer("Вы отправили аудио,а нужно команду! ")
+
+
+async def handle_document(message: types.Message):
+    await message.answer("Вы отправили документ,а нужно команду! ")
+
+
+async def handle_animation(message: types.Message):
+    await message.answer("Вы отправили анимацию,а нужно команду! ")
+
+
+async def handle_sticker(message: types.Message):
+    await message.answer("Вы отправили стикер,а нужно команду! ")
+
+
+@dp.message()
+async def handle_text_message(message: types.Message):
+    # Обработчик ошибки если пользователь отправит просто текст
+    if message.text:
+        await handle_text(message)
+    # Обработчик ошибки если пользователь отправит просто фото
+    elif message.photo:
+        await handle_photo(message)
+    # Обработчик ошибки если пользователь отправит просто видео
+    elif message.video:
+        await handle_video(message)
+    # Обработчик ошибки если пользователь отправит просто аудио
+    elif message.audio:
+        await handle_audio(message)
+    # Обработчик ошибки если пользователь отправит просто документ
+    elif message.document:
+        await handle_document(message)
+    # Обработчик ошибки если пользователь отправит просто гиф (не работает)
+    elif message.animation:
+        await handle_animation(message)
+    # Обработчик ошибки если пользователь отправит просто стикер
+    elif message.sticker:
+        await handle_sticker(message)
+    # Обработчик ошибки если пользователь отправит не распозное
+    else:
+        await message.answer('Не распознано пожалуйста введите команду')
+
+
+# Запуск процесса поллинга новых апдейтов
+async def main():
+    await dp.start_polling(bot)
+
+
+# запуск всего
+if __name__ == "__main__":
+    asyncio.run(main())
